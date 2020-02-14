@@ -79,6 +79,26 @@ void draw() {
     chunk.update();
   for (Chunk chunk : chunks)
     chunk.show();
+
+  pushMatrix();
+  strokeWeight(1 / scale / .03);
+  scale(.03);
+  stroke(255, 0, 0);
+  fill(255, 0, 0);
+  line(0, 0, 0, 190, 0, 0);
+  text("+x", 200, 0, 0);
+  rotateZ(PI / 2);
+  stroke(0, 255, 0);
+  fill(0, 255, 0);
+  line(0, 0, 0, 190, 0, 0);
+  text("+y", 200, 0, 0);
+  rotateY(-PI / 2);
+  rotateX(PI);
+  fill(0, 0, 255);
+  stroke(0, 0, 255);
+  line(0, 0, 0, 190, 0, 0);
+  text("+z", 200, 0, 0);
+  popMatrix();
 }
 
 void mouseWheel(MouseEvent event) {
