@@ -13,8 +13,32 @@ float targViewZ = 30;
 float viewRot = .3;
 float targViewRot = .3;
 
+ArrayList<Chunk> chunks;
+
 void setup() {
   size(1100, 650, P3D);
+
+  chunks = new ArrayList<Chunk>();
+
+  chunks.add(new Chunk(-2, -2, color(255, 255, 63)));
+  chunks.add(new Chunk(-2, -1, color(63, 63, 255)));
+  chunks.add(new Chunk(-2, 0, color(63, 255, 63)));
+  chunks.add(new Chunk(-2, 1, color(255, 63, 63)));
+
+  chunks.add(new Chunk(-1, 1, color(255, 255, 63)));
+  chunks.add(new Chunk(-1, -2, color(63, 63, 255)));
+  chunks.add(new Chunk(-1, -1, color(63, 255, 63)));
+  chunks.add(new Chunk(-1, 0, color(255, 63, 63)));
+
+  chunks.add(new Chunk( 0, 0, color(255, 255, 63)));
+  chunks.add(new Chunk( 0, 1, color(63, 63, 255)));
+  chunks.add(new Chunk( 0, -2, color(63, 255, 63)));
+  chunks.add(new Chunk( 0, -1, color(255, 63, 63)));
+
+  chunks.add(new Chunk( 1, -1, color(255, 255, 63)));
+  chunks.add(new Chunk( 1, 0, color(63, 63, 255)));
+  chunks.add(new Chunk( 1, 1, color(63, 255, 63)));
+  chunks.add(new Chunk( 1, -2, color(255, 63, 63)));
 }
 
 void draw() {
@@ -49,51 +73,12 @@ void draw() {
     targScale = 30;
   }
 
-  chunk(-2, -2, color(255, 255,  63));
-  chunk(-2, -1, color(63,   63, 255));
-  chunk(-2,  0, color(63,  255,  63));
-  chunk(-2,  1, color(255,  63,  63));
-
-  chunk(-1,  1, color(255, 255,  63));
-  chunk(-1, -2, color(63,   63, 255));
-  chunk(-1, -1, color(63,  255,  63));
-  chunk(-1,  0, color(255,  63,  63));
-
-  chunk( 0,  0, color(255, 255,  63));
-  chunk( 0,  1, color(63,   63, 255));
-  chunk( 0, -2, color(63,  255,  63));
-  chunk( 0, -1, color(255,  63,  63));
-
-  chunk( 1, -1, color(255, 255,  63));
-  chunk( 1,  0, color(63,   63, 255));
-  chunk( 1,  1, color(63,  255,  63));
-  chunk( 1, -2, color(255,  63,  63));
-}
-
-void chunk(int cx, int cy, color c) {
-  for (int x = 0; x < 8; x++) {
-    for (int y = 0; y < 8; y++) {
-      stroke(blendColor(c, color(55 + 200 * noise(x / 5., y / 5., millis() * .0001)), MULTIPLY));
-      hexagon(x + cx * 8, y + cy * 8);
-    }
-  }
-}
-
-void hexagon(int hexX, int hexY) {
-  noFill();
-  pushMatrix();
   scale(scale);
   translate(xPos, yPos);
-  strokeWeight(1.5 / scale);
-  translate(hexX * 2, 0);
-  translate(0, hexY * 2 * sin(PI * 1. / 3.));
-  translate(0, 0, 5 * noise(hexX / 5., hexY / 5., millis() * .0001));
-  if (hexY % 2 == 0)
-    translate(1, 0);
-  PVector hexPoint = new PVector(1 * .8, -tan(PI / 6) * .8);
-  for (int i = 0; i < 6; i++)
-    line(hexPoint.x, hexPoint.y, hexPoint.rotate(PI / 3).x, hexPoint.y);
-  popMatrix();
+  for (Chunk chunk : chunks)
+    chunk.update();
+  for (Chunk chunk : chunks)
+    chunk.show();
 }
 
 void mouseWheel(MouseEvent event) {
