@@ -42,17 +42,49 @@ class Tile {
   }
   void show() {
     pushMatrix();
-    noFill();
+    fill(0);
     stroke(c);
     strokeWeight(HEX_STROKE_THICKNESS / scale);
     translate(hx * 2 + hy % 2, hy * 2 * sin(PI / 3), z);
-    PVector hp = new PVector(HEX_RENDER_SIZE, -HEX_RENDER_SIZE * HEX_SIDE_LENGTH);
-    for (int i = 0; i < 6; i++)
-      line(hp.x, hp.y, hp.rotate(PI / 3).x, hp.y);
+    PVector hp = new PVector(HEX_RENDER_SIZE, 0);
+
+    //simple culling of out of view tiles (not fully accurate)
+    //PVector sp = new PVector(screenX(0, 0, 0), screenY(0, 0, 0));
+    //if (sp.x < 0 || sp.x > width || sp.y < 0 || sp.y > height) {
+    //  popMatrix();
+    //  return;
+    //}
+
+    pushMatrix();
+    for (int i = 0; i < 6; i++) {
+      pushMatrix();
+      translate(hp.x, hp.y, -2);
+      rotateX(PI / 2);
+      rectMode(CENTER);
+      rotateY(PI / 2);
+      rect(0, 0, 2 * 0.57735026919 * HEX_RENDER_SIZE, 4);
+      popMatrix();
+      rotateZ(PI / 3);
+    }
+    popMatrix();
+    rotateZ(PI / 6);
+    scale(HEX_RENDER_SIZE);
+    polygon(0, 0, 1.15470053838, 6);
     popMatrix();
   }
   void updateTerrain(color c) {
     this.z = 5 * noise(hx / 5., hy / 5., millis() * .0001);
     this.c = blendColor(c, color(55 + 200 * noise(hx / 5., hy / 5., millis() * .0001)), MULTIPLY);
   }
+}
+
+void polygon(float x, float y, float radius, int npoints) {
+  float angle = TWO_PI / npoints;
+  beginShape();
+  for (float a = 0; a < TWO_PI; a += angle) {
+    float sx = x + cos(a) * radius;
+    float sy = y + sin(a) * radius;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
 }
